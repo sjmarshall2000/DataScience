@@ -131,6 +131,6 @@ struct dataSet{
 };
 
 void buildAttribute(string name, string line, dataSet &d);
-void buildInstance(string line, vector<string> &attributeNames, int attributeNum, dataSet &d, bool rejectMissing=true);
+void buildInstance(string line, vector<string> &attributeNames, int attributeNum, dataSet &d, bool rejectMissing);
 void addClasses(string line, dataSet &d);
 void fileInput(string fname, dataSet &d);

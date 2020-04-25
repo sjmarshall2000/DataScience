@@ -18,7 +18,7 @@ void buildAttribute(string name, string line, dataSet &d){//create attribute def
     attributeValues.push_back("?");
     d.attributeList.insert(pair<string,vector<string>>(name, attributeValues)); //add a new entry to attributeList in dataSet d
 } 
-void buildInstance(string line, vector<string> &attributeNames, int attributeNum, dataSet &d, bool rejectMissing=true){//create instance from line and add to d
+void buildInstance(string line, vector<string> &attributeNames, int attributeNum, dataSet &d, bool rejectMissing){//create instance from line and add to d
     //cout << "line length: " <<line.length() << endl;
     for(int i = 0; i < line.length(); i++){if(!isprint(line[i]) || line[i] == ' '){line.erase(line.begin() + i);}}
     //line.replace(line.begin(), line.end(), ',', ' '); //gee this is easier than commas 
