@@ -139,11 +139,10 @@ void buildAttribute(string name, string line, dataSet &d){//create attribute def
     while(getline(ss, val, ',' )){ //get line until the next ',' char, until end of whole string
         attributeValues.push_back(val);
     }
-    
-
+    //attributeValues.push_back("?");
     d.attributeList.insert(pair<string,vector<string>>(name, attributeValues)); //add a new entry to attributeList in dataSet d
 } 
-void buildInstance(string line, vector<string> &attributeNames, int attributeNum, dataSet &d){//create instance from line and add to d
+void buildInstance(string line, vector<string> &attributeNames, int attributeNum, dataSet &d, bool rejectMissing=true){//create instance from line and add to d
     //cout << "line length: " <<line.length() << endl;
     for(int i = 0; i < line.length(); i++){if(!isprint(line[i]) || line[i] == ' '){line.erase(line.begin() + i);}}
     //line.replace(line.begin(), line.end(), ',', ' '); //gee this is easier than commas 
@@ -158,23 +157,34 @@ void buildInstance(string line, vector<string> &attributeNames, int attributeNum
     for(int i = 0; i < attributeNum; i++){ //we want to hold off on the class for now
         ss >> nextAttributeValue;
         string attName = attributeNames[i];
-        // cout << attName << "|";
+        //cout << attName << "|";
         // for(auto &a : d.attributeList.at(attName)){
-        //     cout << "#'" << a<<"'";
+        //     cout <<"'"<<a<<"'";
         // }
-        // cout << "|error:'" << nextAttributeValue <<"'\n"; //TODO: why this no work
-         int occurances = count(d.attributeList.at(attName).begin(), d.attributeList.at(attName).end(), nextAttributeValue);
-        // cout << " occurances: " << occurances <<endl;
+        //cout << "|selected:'" << nextAttributeValue <<"'\n"; //TODO: why this no work
+        if(count(nextAttributeValue.begin(), nextAttributeValue.end(), '?') != 0){
+            //Its a missing value, oh no!
+            if(rejectMissing){
+                return; //this is how I handle most my problems
+            } else {
+                //TODO: handle missing - extra credit
+            }
+        }
+        int occurances = count(d.attributeList.at(attName).begin(), d.attributeList.at(attName).end(), nextAttributeValue);
+        //cout << " occurances: " << occurances <<endl;
         assert(occurances != 0); //assert the attribute value is one of th epossible values for that attribute
 
         attribute att(attName, nextAttributeValue, &d.attributeList.at(attName));
         attributes.push_back(att);
     }
     ss >> className;
-    
-    
+    // cout << "Classlist: "<<endl<<"'";
+    // for(auto &c : d.classList){
+    //     cout << c << "'";
+    // }
+    // cout  << endl;
     int occurances = count(d.classList.begin(), d.classList.end(), className);
-    cout << className <<"|"<< occurances << endl;
+    // cout << className <<"|"<< occurances << endl;
     assert( occurances != 0);//the className must be in classlist
     
     classification thisClass(className);
@@ -184,9 +194,11 @@ void buildInstance(string line, vector<string> &attributeNames, int attributeNum
     d.instances.push_back(inst);
 }
 void addClasses(string line, dataSet &d){//add classes from line to dataSet d
+    //cout << "initial class line:|" << line <<endl;
     line.erase(remove(line.begin(), line.end(), ' '), line.end()); //get rid of spare spaces
     line.erase(remove(line.begin(), line.end(), '{'), line.end());
     line.erase(remove(line.begin(), line.end(), '}'), line.end());
+    //cout << "final   class line:|" << line <<endl;
     //line.replace(line.begin(), line.end(), 'e', '#'); //<--why this doesn't work, who knows 
     for(int i = 0; i < line.length(); i++){if(line[i] == ','){line[i] = ' ';}} //this is the same thing
 
@@ -214,7 +226,7 @@ void fileInput(string fname, dataSet &d){
             string attributeName;
             file >> attributeName;
             if(attributeName == "class"){
-                
+                getline(file, inputString);
                 addClasses(inputString,d);//"its like freshman orientation all over again"
             } else {
                 //Time to make a new attribute
