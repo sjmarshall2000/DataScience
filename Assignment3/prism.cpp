@@ -1,35 +1,40 @@
 #include "prism.h"
 
 /*
- prism.h contains an import of arffParser, that means 
- calling prism.h includes everything in arffParser
- It also includes all the #includes needed
- 
- arffParser has all the structs, methods and such to get
- the data, all you need to call is create a dataSet var
- and call the fileInput() function, passing a filename
- string and the dataset variable.
- 
+ This is a collaboration between Allen Harper and Stephen Marshall 
+ in an attempt to construct an all-in-one .arff file parser, classifier
+ structure system, and rule-building application.
+
+ This program relies on no libraries outside the C++ Standard
+ Template Library and as a result contains implementations of much 
+ of the backing data structures that one would already find available 
+ in a tool like Weka.
+
+
+ Current Status:
+
+    Reads nearly all .arff files presented with a few minor
+        inconsistencies("@DATA" must be caps for example)
+
+    Builds an object-oriented model of the data split into
+        Instances, attributes, classifications, and datasets
+
+    Every object has a suite of methods to facilitate seamless
+        usage of member values and capabilities, as well as full
+        support to print out every type in a human-readable format 
+        through constistent toString() implementations.
+
+    Features a nearly-complete implementation of J. Crendrowska's
+        PRISM rule-building algorithm. As of now, a logical error 
+        prevents the algorithm from self-terminating.
+
+    The logical split of functions, declarations, and implementations
+        is not currently finalized between prism.cpp and prism.h and
+        as a result, prism.h functions more as a secondary code file
+        than as a true header file.
  */
 
-// double relativeFreq(classification c, dataSet &d){ //calculate ratio of class c / not class c in dataset d
-//     int numInstances = d.numClass(c);
-//     int dataSize = d.instances.size();
-//     double freq = numInstances / dataSize;
-//     return freq;
-// }
-double probability(string &c, attributeValuePair &avp, dataSet &d){
-    double prob = 0;
-    int numInstances = d.instances.size();
-    int numMatches = 0;
-    for (instance &i : d.instances){
-        if(i.hasPair(avp) && i.thisClass.value==c){
-            numMatches++;
-        }
-    }
-    prob = ((double)numMatches / numInstances);
-    return prob;
-}
+
 void buildRules(dataSet &d, vector<rule> ruleList){
     //for every class in dataset d
     for(string &c : d.classList){
@@ -116,25 +121,8 @@ void buildRules(dataSet &d, vector<rule> ruleList){
         };
     }
 
-    /* 
-    rule currentRule;
-    attributeValuePair maxInfoGain;
-    for( string &c : d.classList){
-        map<string, vector<string>>::iterator it;
-        for (it = d.attributeList.begin(); it != d.attributeList.end(); ++it) {//for every attribute
-            string attributeName = it->first;
-            for (string &a : it->second){//for every value of that attribute
-                string attributeValue = a;
-                attributeValuePair avp(attributeName, attributeValue, &d.attributeList.at(attributeName));
-            }
-        }
-    }
-    */
-}
-
-// void buildClassifier(dataSet &d){
     
-// }
+}
 
 int main(int argc, char *argv[]){
     //cout << "Enter filename: ";

@@ -248,6 +248,18 @@ struct dataSet{
     }
 };
 
+double probability(string &c, attributeValuePair &avp, dataSet &d){
+    double prob = 0;
+    int numInstances = d.instances.size();
+    int numMatches = 0;
+    for (instance &i : d.instances){
+        if(i.hasPair(avp) && i.thisClass.value==c){
+            numMatches++;
+        }
+    }
+    prob = ((double)numMatches / numInstances);
+    return prob;
+}
 void buildAttribute(string name, string line, dataSet &d, bool rejectMissing){//create attribute defined in line and add to dataSet d
     //time to cleanup the line, it looks like this:"{value,value-2,value-3,value-ect}"
     line.erase(remove(line.begin(), line.end(), '{'), line.end());
