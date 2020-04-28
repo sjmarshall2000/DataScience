@@ -10,6 +10,9 @@
  of the backing data structures that one would already find available 
  in a tool like Weka.
 
+I'm so sorry, but it must be compiled in gcc currently
+Full CLang compliance would need to be enforced after core functionality
+:)
 
  Current Status:
 
