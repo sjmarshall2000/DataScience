@@ -292,9 +292,9 @@ void buildInstance(string line, vector<string> &attributeNames, int attributeNum
     for(int i = 0; i < attributeNum; i++){ //we want to hold off on the class for now
         ss >> nextAttributeValue;
         string attName = attributeNames[i];
-        //cout << attName << "|";
-        // for(auto &a : d.attributeList.at(attName)){
-        //     cout <<"'"<<a<<"'";
+        //cout << attName << "|"; //debug
+        // for(auto &a : d.attributeList.at(attName)){ //debug
+        //     cout <<"'"<<a<<"'"; //debug
         // }
         //cout << "|selected:'" << nextAttributeValue <<"'\n"; //TODO: why this no work
         if(count(nextAttributeValue.begin(), nextAttributeValue.end(), '?') != 0){
@@ -313,11 +313,11 @@ void buildInstance(string line, vector<string> &attributeNames, int attributeNum
         attributes.push_back(att);
     }
     ss >> className;
-    // cout << "Classlist: "<<endl<<"'";
-    // for(auto &c : d.classList){
+    // cout << "Classlist: "<<endl<<"'"; // debug
+    // for(auto &c : d.classList){ // debug
     //     cout << c << "'";
     // }
-    // cout  << endl;
+    // cout  << endl; // debug
     int occurances = count(d.classList.begin(), d.classList.end(), className);
     // cout << className <<"|"<< occurances << endl;
     assert( occurances != 0);//the className must be in classlist
@@ -329,12 +329,10 @@ void buildInstance(string line, vector<string> &attributeNames, int attributeNum
     d.instances.push_back(inst);
 }
 void addClasses(string line, dataSet &d){//add classes from line to dataSet d
-    //cout << "initial class line:|" << line <<endl;
     line.erase(remove(line.begin(), line.end(), ' '), line.end()); //get rid of spare spaces
     line.erase(remove(line.begin(), line.end(), '{'), line.end());
     line.erase(remove(line.begin(), line.end(), '}'), line.end());
-    //cout << "final   class line:|" << line <<endl;
-    //line.replace(line.begin(), line.end(), 'e', '#'); //<--why this doesn't work, who knows 
+   //line.replace(line.begin(), line.end(), 'e', '#'); //<--why this doesn't work, who knows 
     for(int i = 0; i < line.length(); i++){if(line[i] == ','){line[i] = ' ';}} //this is the same thing
 
     stringstream ss(line);
@@ -342,9 +340,8 @@ void addClasses(string line, dataSet &d){//add classes from line to dataSet d
     while(ss >> className){
         d.classList.push_back(className);
     }
-
 }
-//thanks Blake for this parser, I changed it a bit (a lot)
+//thanks Blake for this parser, I changed it a bit (a lot) 
 void fileInput(string fname, dataSet &d, bool rejectMissing){
     ifstream file;
     string inputString;
@@ -376,13 +373,6 @@ void fileInput(string fname, dataSet &d, bool rejectMissing){
         file >> inputString;
     } 
     int attributeCount = attributeNames.size();
-    
-    // cout << "ATTRIBUTES:"<<endl;
-    // for(auto &p : d.attributeList){
-    //     for( auto &s : p.second){
-    //         cout << s << "|length:"<<s.length()<<endl;
-    //     }
-    // }
 
     //"@DATA" is in inputString now
     getline(file, inputString); // skip a line, this is dirty I know

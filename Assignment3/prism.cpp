@@ -38,12 +38,12 @@
 void buildRules(dataSet &d, vector<rule> ruleList){
     //for every class in dataset d
     for(string &c : d.classList){
-        cout <<"class :" <<c<< endl;
+        //cout <<"class :" <<c<< endl;//debug
         //vector<rule> ruleList;
         dataSet copy1(d);
         
         //while copy1 has any of class c in it
-        cout<<"copy1 has "<<copy1.numClass(c)<< " of " << c<<endl;
+        //cout<<"copy1 has "<<copy1.numClass(c)<< " of " << c<<endl;//debug
         while(copy1.numClass(c) > 1){ 
             
             //make a rule to fill up over time
@@ -79,7 +79,7 @@ void buildRules(dataSet &d, vector<rule> ruleList){
                             maxAssigned = true;
                         } else { //normal case
                             if (avpProb > maxProb){
-                                cout << maxProb <<" < " << avpProb << endl;
+                                //cout << maxProb <<" < " << avpProb << endl; //debug
                                 max = avp;
                                 maxProb = avpProb;
                                 
@@ -125,27 +125,24 @@ void buildRules(dataSet &d, vector<rule> ruleList){
 }
 
 int main(int argc, char *argv[]){
-    //cout << "Enter filename: ";
     string fileName;
-    //cin >> fileName;
+    cout << "Enter filename: ";
+    cin >> fileName;
     //fileName = "soybean.arff";//im tired of typing it in
-    fileName ="weather.nominal.arff";
+    //fileName ="weather.nominal.arff"; //this will do
     cout << endl;
 
     dataSet data1;
     fileInput(fileName, data1, true);
     cout << data1.toString(true) << endl;
-    cout << "size of dataSet: " << sizeof(data1) << " bytes"<< endl << endl;
-
+    cout << "Size of dataSet: " << sizeof(data1) << " bytes\n\n";
+    cout << "Would you like to build a ruleset?\n"
+         << "(It probably wont work, prepare to force close program)\n";
     vector<rule> rules;
     buildRules(data1, rules);
-    // attribute a("outlook","sunny",&data1.attributeList.at("outlook"));
-    // attributeValuePair avp(a);
-    // string c = "yes";
-    // cout <<"Prob:"<<probability(c,avp, data1)<<endl;
-    // for(rule &r : rules){
-    //     cout << r.toString() << endl;
-    // }
+    for(rule &r : rules){
+        cout << r.toString() << endl;
+    }
 
 
 }
